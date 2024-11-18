@@ -1,6 +1,0 @@
-# Archivos temporales de Python
-__pycache__/
-*.pyc
-
-# Configuración de VS Code
-.vscode/
