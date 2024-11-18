@@ -1,144 +1,141 @@
-import math  # Biblioteca para operaciones matemáticas (usada aquí para cálculos exponenciales).
-from solution import Solution  # Importa la clase Solution (definida previamente).
+import math  # Biblioteca para operaciones matemáticas.
+from solution import Solution  # Clase Solution para manejar las soluciones del problema.
 import random  # Biblioteca para generación de números aleatorios.
+import os  # Para manejar rutas de archivos.
 
-# Diccionario que almacena capacidades predefinidas para diferentes tipos de datos.
+# Capacidades predefinidas para archivos especiales.
 CAPACITIES = {
-    "capa": [8000, 10000, 12000, 14000],  # Capacidades para el tipo "capa".
-    "capb": [5000, 6000, 7000, 8000],     # Capacidades para el tipo "capb".
-    "capc": [5000, 5750, 6500, 7250],     # Capacidades para el tipo "capc".
+    "capa": [8000, 10000, 12000, 14000],
+    "capb": [5000, 6000, 7000, 8000],
+    "capc": [5000, 5750, 6500, 7250],
 }
 
 def parse_large_file(file_path, capacity_index):
     """
-    Procesa un archivo grande que contiene datos de instalaciones y clientes, 
-    reemplazando marcadores de "capacidad" por valores concretos.
+    Procesa un archivo grande reemplazando 'capacity' con un valor específico.
     
     Args:
-        file_path (str): Ruta al archivo de datos.
-        capacity_index (int): Índice para seleccionar el valor de capacidad en CAPACITIES.
+        file_path (str): Ruta al archivo.
+        capacity_index (int): Índice para seleccionar el valor de capacidad.
     
     Returns:
         tuple: Una lista de instalaciones y una lista de clientes.
     """
-    facilities = []  # Lista para almacenar datos de instalaciones.
-    customers = []   # Lista para almacenar datos de clientes.
+    facilities = []
+    customers = []
 
-    # Obtener el nombre base del archivo (sin ruta ni extensión).
-    base_name = file_path.split('/')[-1].split('.')[0]
-
-    # Verificar si el nombre base del archivo está en CAPACITIES.
+    # Determinar el tipo de archivo según su nombre.
+    base_name = os.path.basename(file_path).split('.')[0]
     if base_name not in CAPACITIES:
-        raise ValueError(f"Unknown file base name '{base_name}' for large file parsing.")
+        raise ValueError(f"Archivo {base_name} no es un tipo especial reconocido (capa, capb, capc).")
 
-    # Obtener el valor de capacidad correspondiente al índice.
+    # Obtener el valor de capacidad correspondiente.
     capacity_value = CAPACITIES[base_name][capacity_index]
 
-    # Abrir y leer el archivo.
     with open(file_path, 'r') as file:
-        lines = file.readlines()  # Leer todas las líneas del archivo.
-        m, n = map(int, lines[0].split())  # Primera línea: número de instalaciones y clientes.
-        facility_lines = lines[1:1 + m]    # Líneas correspondientes a las instalaciones.
-        customer_lines = lines[1 + m:]     # Líneas correspondientes a los clientes.
+        lines = file.readlines()
+        m, n = map(int, lines[0].split())  # Número de instalaciones y clientes.
+        facility_lines = lines[1:1 + m]
+        customer_lines = lines[1 + m:]
 
-        # Procesar datos de instalaciones.
+        # Procesar instalaciones.
         for line in facility_lines:
             parts = line.split()
             facilities.append({
-                'capacity': capacity_value,  # Asignar capacidad desde el valor predefinido.
-                'fixed_cost': float(parts[1])  # Costo fijo de la instalación.
+                'capacity': capacity_value,  # Reemplaza 'capacity' por el valor específico.
+                'fixed_cost': float(parts[1])
             })
 
-        # Procesar datos de clientes.
+        # Procesar clientes.
         for line in customer_lines:
             parts = line.split()
             customers.append({
-                'demand': float(parts[0]),  # Demanda del cliente.
-                'costs': [float(c) for c in parts[1:]]  # Lista de costos de asignación.
+                'demand': float(parts[0]),
+                'costs': [float(c) for c in parts[1:]]
             })
 
-    return facilities, customers  # Retorna las listas procesadas de instalaciones y clientes.
+    return facilities, customers
 
 
-# Clase principal que implementa el problema de localización de instalaciones.
 class CFLP:
     def __init__(self, file_path, capacity_index=0):
         """
         Inicializa una instancia del problema CFLP.
         
         Args:
-            file_path (str): Ruta al archivo de datos de entrada.
-            capacity_index (int): Índice para seleccionar capacidad en CAPACITIES.
+            file_path (str): Ruta al archivo de datos.
+            capacity_index (int): Índice para seleccionar capacidad en CAPACITIES (para archivos especiales).
         """
-        self.file_path = file_path  # Ruta del archivo de entrada.
-        self.facilities = []       # Lista de instalaciones.
-        self.customers = []        # Lista de clientes.
-        self.read_instance()       # Leer y procesar los datos del archivo.
+        self.file_path = file_path
+        self.capacity_index = capacity_index
+        self.facilities = []
+        self.customers = []
+        self.read_instance()
 
     def read_instance(self):
         """
         Lee el archivo de datos y construye las listas de instalaciones y clientes.
         """
-        with open(self.file_path, 'r') as f:
-            # Leer el número de instalaciones y clientes desde la primera línea.
-            m, n = map(int, f.readline().split())
-            
-            # Leer datos de instalaciones.
-            for _ in range(m):
-                capacity, fixed_cost = map(float, f.readline().split())
-                self.facilities.append({
-                    'capacity': capacity,      # Capacidad de la instalación.
-                    'fixed_cost': fixed_cost   # Costo fijo de abrir la instalación.
-                })
+        # Determinar si el archivo es especial (capa, capb, capc) o regular.
+        base_name = os.path.basename(self.file_path).split('.')[0]
+        if base_name in CAPACITIES:
+            # Usar parse_large_file para archivos especiales.
+            print(f"Procesando archivo especial: {base_name}")
+            self.facilities, self.customers = parse_large_file(self.file_path, self.capacity_index)
+        else:
+            # Leer archivo regular.
+            with open(self.file_path, 'r') as f:
+                m, n = map(int, f.readline().split())
+                for _ in range(m):
+                    capacity, fixed_cost = map(float, f.readline().split())
+                    self.facilities.append({
+                        'capacity': capacity,
+                        'fixed_cost': fixed_cost
+                    })
+                for _ in range(n):
+                    line = f.readline().split()
+                    demand = float(line[0])
+                    costs = list(map(float, line[1:]))
+                    self.customers.append({
+                        'demand': demand,
+                        'costs': costs
+                    })
 
-            # Leer datos de clientes.
-            for _ in range(n):
-                line = f.readline().split()
-                demand = float(line[0])          # Demanda del cliente.
-                costs = list(map(float, line[1:]))  # Costos de asignación a cada instalación.
-                self.customers.append({
-                    'demand': demand,
-                    'costs': costs
-                })
-
-    def simulated_annealing(self):
+    def simulated_annealing(self, temperature=1000, cooling_rate=0.9995, iterations=10, accept_temperature=0.01):
         """
         Implementa el algoritmo de recocido simulado para optimizar el problema CFLP.
+        
+        Args:
+            temperature (float): Temperatura inicial para el algoritmo.
+            cooling_rate (float): Tasa de enfriamiento para reducir la temperatura.
+            iterations (int): Número de iteraciones por cada temperatura.
+            accept_temperature (float): Temperatura mínima para detener el algoritmo.
         
         Returns:
             Solution: La mejor solución encontrada.
         """
-        # Crear una solución inicial basada en los datos.
         current_solution = Solution(self.facilities, self.customers)
-        best_solution = current_solution  # Inicialmente, la mejor solución es la actual.
+        best_solution = current_solution
+        print(f"Costo inicial: {current_solution.total_cost}")
 
-        t = 10000  # Temperatura inicial para el algoritmo.
-        cooling_rate = 0.99  # Tasa de enfriamiento (reduce la temperatura en cada iteración).
-        accept_temperature = 0.00001  # Temperatura mínima para detener el algoritmo.
+        t = temperature
 
-        # Continuar el proceso mientras la temperatura sea mayor que la mínima aceptable.
         while t > accept_temperature:
-            for _ in range(10):  # Número de iteraciones por cada temperatura.
-                # Generar una solución vecina.
+            for _ in range(iterations):
                 new_solution = current_solution.generate_neighbor()
+                new_solution.local_search(max_customers=100)
 
-                # Evaluar si la solución vecina es aceptable.
                 if (
-                    # Aceptar si el costo de la nueva solución es menor.
                     new_solution.total_cost < current_solution.total_cost
-                    or 
-                    # Aceptar con una probabilidad basada en la temperatura (exploración).
-                    random.random() < math.exp(
+                    or random.random() < math.exp(
                         -(new_solution.total_cost - current_solution.total_cost) / t
                     )
                 ):
-                    # Actualizar la solución actual con la vecina aceptada.
                     current_solution = new_solution
-                    # Si la nueva solución es mejor que la mejor conocida, actualizar.
                     if new_solution.total_cost < best_solution.total_cost:
                         best_solution = new_solution
 
-            # Reducir la temperatura aplicando la tasa de enfriamiento.
             t *= cooling_rate
 
-        return best_solution  # Retorna la mejor solución encontrada.
+        return best_solution
+

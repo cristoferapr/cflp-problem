@@ -1,38 +1,164 @@
-import time  # Biblioteca para medir el tiempo de ejecución.
-from cflp import CFLP  # Importa la clase CFLP, que implementa el problema de localización de instalaciones.
+import os
+import time
+from cflp import CFLP
+
+# Capacidades predefinidas para archivos especiales.
+CAPACITIES = {
+    "capa": [8000, 10000, 12000, 14000],
+    "capb": [5000, 6000, 7000, 8000],
+    "capc": [5000, 5750, 6500, 7250],
+}
+
+def listar_instancias(carpeta, excluir=[]):
+    """
+    Lista los archivos en la carpeta, excluyendo los especificados.
+    """
+    return [f for f in os.listdir(carpeta) if f.endswith('.txt') and f not in excluir]
 
 def main():
     """
-    Función principal que ejecuta el problema CFLP para una instancia específica,
-    utilizando el algoritmo de recocido simulado para encontrar la mejor solución.
+    Menú interactivo para resolver problemas CFLP.
     """
+    carpeta_instancias = "./instances"
+    excluir_especiales = ["capa.txt", "capb.txt", "capc.txt"]
 
-    # Nombre del archivo que contiene los datos de la instancia.
-    file_name = f"./instances/cap92.txt"
-    print(f"Processing {file_name}")  # Mensaje para indicar que se está procesando el archivo.
+    while True:
+        print("\nMenú Principal:")
+        print("1. Resolver una instancia regular")
+        print("2. Resolver todas las instancias regulares")
+        print("3. Resolver una instancia especial (capa, capb, capc)")
+        print("4. Resolver un archivo especificado por nombre")
+        print("5. Salir")
+        
+        opcion = input("Selecciona una opción: ")
 
-    # Crear una instancia del problema CFLP utilizando el archivo especificado.
-    cflp = CFLP(file_name)
+        if opcion == "1":
+            # Resolver una instancia regular
+            instancias = listar_instancias(carpeta_instancias, excluir=excluir_especiales)
+            print("\nInstancias disponibles:")
+            for i, instancia in enumerate(instancias):
+                print(f"{i + 1}. {instancia}")
+            seleccion = int(input("Selecciona una instancia: ")) - 1
+            file_name = os.path.join(carpeta_instancias, instancias[seleccion])
+            
+            temperatura = float(input("Temperatura inicial (default 1000): ") or 1000)
+            cooling_rate = float(input("Cooling rate (default 0.9995): ") or 0.9995)
+            iteraciones = int(input("Iteraciones por temperatura (default 10): ") or 10)
 
-    # Medir el tiempo de inicio del algoritmo.
-    start_time = time.time()
+            print(f"Procesando {file_name}...")
+            cflp = CFLP(file_name)
+            start_time = time.time()
+            best_solution = cflp.simulated_annealing(
+                temperature=temperatura,
+                cooling_rate=cooling_rate,
+                iterations=iteraciones
+            )
+            end_time = time.time()
+            
+            print(f"Finalizado en {end_time - start_time:.2f}s")
+            print(f"Solution valid: {best_solution.check_solution()}")
+            best_solution.print_solution()
 
-    # Ejecutar el algoritmo de recocido simulado para encontrar la mejor solución.
-    best_solution = cflp.simulated_annealing()
+        elif opcion == "2":
+            # Resolver todas las instancias regulares
+            instancias = listar_instancias(carpeta_instancias, excluir=excluir_especiales)
+            print("\nResolviendo todas las instancias regulares...")
+            resultados = []
 
-    # Medir el tiempo de finalización del algoritmo.
-    end_time = time.time()
+            temperatura = float(input("Temperatura inicial (default 1000): ") or 1000)
+            cooling_rate = float(input("Cooling rate (default 0.9995): ") or 0.9995)
+            iteraciones = int(input("Iteraciones por temperatura (default 10): ") or 10)
 
-    # Calcular la duración total de la ejecución.
-    duration = end_time - start_time
+            for instancia in instancias:
+                file_name = os.path.join(carpeta_instancias, instancia)
+                print(f"Procesando {file_name}...")
+                cflp = CFLP(file_name)
+                start_time = time.time()
+                best_solution = cflp.simulated_annealing(
+                    temperature=temperatura,
+                    cooling_rate=cooling_rate,
+                    iterations=iteraciones
+                )
+                end_time = time.time()
+                
+                resultados.append({
+                    "Instancia": instancia,
+                    "Costo Total": best_solution.total_cost,
+                    "Validez": best_solution.check_solution(),
+                    "Tiempo (s)": end_time - start_time
+                })
 
-    # Imprimir el tiempo de ejecución y validar la solución obtenida.
-    print(f"Finished {file_name} in {duration:.2f}s")  # Tiempo total en segundos.
-    print(f"Solution valid: {best_solution.check_solution()}")  # Verificar si la solución cumple restricciones.
-    
-    # Imprimir los detalles de la mejor solución encontrada.
-    best_solution.print_solution()
+            # Guardar los resultados en un archivo
+            with open("resultados_instancias_regulares.txt", "w") as f:
+                for resultado in resultados:
+                    f.write(f"{resultado['Instancia']}: Costo Total = {resultado['Costo Total']}, "
+                            f"Validez = {resultado['Validez']}, Tiempo = {resultado['Tiempo (s)']:.2f}s\n")
+            print("\nResultados guardados en 'resultados_instancias_regulares.txt'")
 
-# Verificar si este archivo se está ejecutando como programa principal.
+        elif opcion == "3":
+            # Resolver una instancia especial
+            print("\nInstancias especiales disponibles:")
+            for i, especial in enumerate(excluir_especiales):
+                print(f"{i + 1}. {especial}")
+            seleccion = int(input("Selecciona una instancia especial: ")) - 1
+            instancia_especial = excluir_especiales[seleccion]
+            file_name = os.path.join(carpeta_instancias, instancia_especial)
+
+            print("Capacidades disponibles:")
+            for i, capacidad in enumerate(CAPACITIES[instancia_especial.split('.')[0]]):
+                print(f"{i + 1}. {capacidad}")
+            seleccion_capacidad = int(input("Selecciona una capacidad: ")) - 1
+
+            temperatura = float(input("Temperatura inicial (default 1000): ") or 1000)
+            cooling_rate = float(input("Cooling rate (default 0.9995): ") or 0.9995)
+            iteraciones = int(input("Iteraciones por temperatura (default 10): ") or 10)
+
+            print(f"Procesando {file_name} con capacidad {CAPACITIES[instancia_especial.split('.')[0]][seleccion_capacidad]}...")
+            cflp = CFLP(file_name, capacity_index=seleccion_capacidad)
+            start_time = time.time()
+            best_solution = cflp.simulated_annealing(
+                temperature=temperatura,
+                cooling_rate=cooling_rate,
+                iterations=iteraciones
+            )
+            end_time = time.time()
+            
+            print(f"Finalizado en {end_time - start_time:.2f}s")
+            print(f"Solution valid: {best_solution.check_solution()}")
+            best_solution.print_solution()
+
+        elif opcion == "4":
+            # Resolver un archivo especificado por nombre
+            archivo_nombre = input("Ingresa el nombre del archivo (debe estar en la carpeta raíz): ").strip()
+            if not os.path.exists(archivo_nombre):
+                print(f"El archivo {archivo_nombre} no existe en la carpeta raíz.")
+                continue
+            
+            temperatura = float(input("Temperatura inicial (default 1000): ") or 1000)
+            cooling_rate = float(input("Cooling rate (default 0.9995): ") or 0.9995)
+            iteraciones = int(input("Iteraciones por temperatura (default 10): ") or 10)
+
+            print(f"Procesando {archivo_nombre}...")
+            cflp = CFLP(archivo_nombre)
+            start_time = time.time()
+            best_solution = cflp.simulated_annealing(
+                temperature=temperatura,
+                cooling_rate=cooling_rate,
+                iterations=iteraciones
+            )
+            end_time = time.time()
+            
+            print(f"Finalizado en {end_time - start_time:.2f}s")
+            print(f"Solution valid: {best_solution.check_solution()}")
+            best_solution.print_solution()
+
+        elif opcion == "5":
+            # Salir
+            print("Saliendo del programa...")
+            break
+
+        else:
+            print("Opción no válida, intenta de nuevo.")
+
 if __name__ == "__main__":
     main()
