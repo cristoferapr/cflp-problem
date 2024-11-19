@@ -15,6 +15,18 @@ def listar_instancias(carpeta, excluir=[]):
     """
     return [f for f in os.listdir(carpeta) if f.endswith('.txt') and f not in excluir]
 
+def guardar_resultado(archivo, solucion, tiempo):
+    """
+    Guarda el resultado de una solución en un archivo de texto.
+    """
+    with open("resultados_solucciones.txt", "a") as f:
+        f.write(f"Archivo: {archivo}\n")
+        f.write(f"Tiempo: {tiempo:.2f} segundos\n")
+        f.write(f"Solución válida: {solucion.check_solution()}\n")
+        f.write(f"Costo total: {solucion.total_cost}\n")
+        f.write("-" * 40 + "\n")
+    print(f"Resultado guardado en 'resultados_solucciones.txt'.")
+
 def main():
     """
     Menú interactivo para resolver problemas CFLP.
@@ -59,12 +71,12 @@ def main():
             print(f"Solution valid: {best_solution.check_solution()}")
             best_solution.print_solution()
 
+            guardar_resultado(file_name, best_solution, end_time - start_time)
+
         elif opcion == "2":
             # Resolver todas las instancias regulares
             instancias = listar_instancias(carpeta_instancias, excluir=excluir_especiales)
             print("\nResolviendo todas las instancias regulares...")
-            resultados = []
-
             temperatura = float(input("Temperatura inicial (default 1000): ") or 1000)
             cooling_rate = float(input("Cooling rate (default 0.9995): ") or 0.9995)
             iteraciones = int(input("Iteraciones por temperatura (default 10): ") or 10)
@@ -81,19 +93,7 @@ def main():
                 )
                 end_time = time.time()
                 
-                resultados.append({
-                    "Instancia": instancia,
-                    "Costo Total": best_solution.total_cost,
-                    "Validez": best_solution.check_solution(),
-                    "Tiempo (s)": end_time - start_time
-                })
-
-            # Guardar los resultados en un archivo
-            with open("resultados_instancias_regulares.txt", "w") as f:
-                for resultado in resultados:
-                    f.write(f"{resultado['Instancia']}: Costo Total = {resultado['Costo Total']}, "
-                            f"Validez = {resultado['Validez']}, Tiempo = {resultado['Tiempo (s)']:.2f}s\n")
-            print("\nResultados guardados en 'resultados_instancias_regulares.txt'")
+                guardar_resultado(file_name, best_solution, end_time - start_time)
 
         elif opcion == "3":
             # Resolver una instancia especial
@@ -127,6 +127,8 @@ def main():
             print(f"Solution valid: {best_solution.check_solution()}")
             best_solution.print_solution()
 
+            guardar_resultado(file_name, best_solution, end_time - start_time)
+
         elif opcion == "4":
             # Resolver un archivo especificado por nombre
             archivo_nombre = input("Ingresa el nombre del archivo (debe estar en la carpeta raíz): ").strip()
@@ -151,6 +153,8 @@ def main():
             print(f"Finalizado en {end_time - start_time:.2f}s")
             print(f"Solution valid: {best_solution.check_solution()}")
             best_solution.print_solution()
+
+            guardar_resultado(archivo_nombre, best_solution, end_time - start_time)
 
         elif opcion == "5":
             # Salir
