@@ -1,0 +1,70 @@
+# **CFLP Solver**
+
+Este proyecto es una herramienta interactiva para resolver problemas de Localización de Instalaciones con Capacidad (CFLP). Permite procesar instancias individuales o múltiples y comparar los resultados obtenidos con soluciones óptimas conocidas.
+
+---
+
+## **Características**
+
+- Resolver **instancias regulares** individuales o todas a la vez.
+- Resolver **instancias especiales** con diferentes capacidades.
+- Comparar automáticamente los resultados de las instancias regulares con los valores óptimos conocidos.
+- Generar un gráfico que muestra la diferencia entre los valores obtenidos y los óptimos.
+- Guardar los resultados en un archivo de texto para referencia posterior.
+
+---
+
+## **Requisitos**
+
+- Python 3.x
+- Librerías necesarias:
+  - `matplotlib`
+
+Instala los requisitos ejecutando:
+
+```bash
+pip install matplotlib
+```
+
+---
+
+## **Estructura del proyecto**
+
+- **`cflp.py`**: Implementación principal del modelo CFLP.
+- **`main.py`**: Archivo principal que ejecuta el menú interactivo.
+- **`instances/`**: Carpeta que contiene las instancias de entrada en formato `.txt`.
+- **`resultados_solucciones.txt`**: Archivo de salida donde se almacenan los resultados.
+- **`comparacion_costos.png`**: Gráfico generado al comparar los resultados obtenidos con los valores óptimos.
+
+---
+
+## **Uso**
+
+1. Ejecuta el archivo principal:
+
+   ```bash
+   python main.py
+   ```
+
+2. Sigue el menú interactivo:
+   - **Opción 1:** Resolver una instancia regular.
+   - **Opción 2:** Resolver todas las instancias regulares y generar un gráfico de comparación.
+   - **Opción 3:** Resolver una instancia especial con diferentes capacidades.
+   - **Opción 4:** Resolver un archivo específico por nombre.
+   - **Opción 5:** Salir.
+
+3. Los resultados se guardarán automáticamente en `resultados_solucciones.txt`.
+
+---
+
+## **Comparación con valores óptimos**
+
+Si procesas todas las instancias regulares (opción 2), el programa:
+- Compara los resultados obtenidos con un conjunto de valores óptimos predefinidos.
+- Genera un gráfico (`comparacion_costos.png`) que muestra la diferencia entre los costos obtenidos y los óptimos.
+
+---
+
+## **Contribuciones**
+
+Este proyecto está diseñado para ser sencillo y funcional. Si deseas mejorar o extender sus capacidades, siéntete libre de hacerlo.

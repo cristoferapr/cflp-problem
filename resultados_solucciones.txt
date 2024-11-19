@@ -123,3 +123,133 @@ Tiempo: 0.76 segundos
 Solución válida: True
 Costo total: 1238372.575
 ----------------------------------------
+Archivo: ./instances\cap101.txt
+Tiempo: 4.87 segundos
+Solución válida: True
+Costo total: 815872.5375000001
+----------------------------------------
+Archivo: ./instances\cap102.txt
+Tiempo: 4.78 segundos
+Solución válida: True
+Costo total: 942749.5625000002
+----------------------------------------
+Archivo: ./instances\cap103.txt
+Tiempo: 5.03 segundos
+Solución válida: True
+Costo total: 1072291.1500000001
+----------------------------------------
+Archivo: ./instances\cap104.txt
+Tiempo: 5.84 segundos
+Solución válida: True
+Costo total: 1243804.8
+----------------------------------------
+Archivo: ./instances\cap121.txt
+Tiempo: 10.62 segundos
+Solución válida: True
+Costo total: 991571.4500000004
+----------------------------------------
+Archivo: ./instances\cap122.txt
+Tiempo: 14.25 segundos
+Solución válida: True
+Costo total: 1230383.8250000002
+----------------------------------------
+Archivo: ./instances\cap123.txt
+Tiempo: 9.77 segundos
+Solución válida: True
+Costo total: 1452108.0625
+----------------------------------------
+Archivo: ./instances\cap124.txt
+Tiempo: 10.73 segundos
+Solución válida: True
+Costo total: 1790772.7499999993
+----------------------------------------
+Archivo: ./instances\cap131.txt
+Tiempo: 15.42 segundos
+Solución válida: True
+Costo total: 991571.4500000004
+----------------------------------------
+Archivo: ./instances\cap132.txt
+Tiempo: 16.06 segundos
+Solución válida: True
+Costo total: 1225237.3124999998
+----------------------------------------
+Archivo: ./instances\cap133.txt
+Tiempo: 16.16 segundos
+Solución válida: True
+Costo total: 1430156.2625
+----------------------------------------
+Archivo: ./instances\cap134.txt
+Tiempo: 16.02 segundos
+Solución válida: True
+Costo total: 1844119.4499999993
+----------------------------------------
+Archivo: ./instances\cap61.txt
+Tiempo: 5.73 segundos
+Solución válida: True
+Costo total: 940539.8374999999
+----------------------------------------
+Archivo: ./instances\cap62.txt
+Tiempo: 5.94 segundos
+Solución válida: True
+Costo total: 1004694.7875
+----------------------------------------
+Archivo: ./instances\cap63.txt
+Tiempo: 5.58 segundos
+Solución válida: True
+Costo total: 1090025.1875000002
+----------------------------------------
+Archivo: ./instances\cap64.txt
+Tiempo: 6.14 segundos
+Solución válida: True
+Costo total: 1173874.3750000002
+----------------------------------------
+Archivo: ./instances\cap71.txt
+Tiempo: 5.91 segundos
+Solución válida: True
+Costo total: 948371.025
+----------------------------------------
+Archivo: ./instances\cap72.txt
+Tiempo: 6.18 segundos
+Solución válida: True
+Costo total: 1024070.5500000002
+----------------------------------------
+Archivo: ./instances\cap73.txt
+Tiempo: 5.87 segundos
+Solución válida: True
+Costo total: 1052681.875
+----------------------------------------
+Archivo: ./instances\cap74.txt
+Tiempo: 4.36 segundos
+Solución válida: True
+Costo total: 1210920.2875000003
+----------------------------------------
+Archivo: ./instances\cap91.txt
+Tiempo: 5.00 segundos
+Solución válida: True
+Costo total: 829775.7875000001
+----------------------------------------
+Archivo: ./instances\cap92.txt
+Tiempo: 6.16 segundos
+Solución válida: True
+Costo total: 944173.5250000001
+----------------------------------------
+Archivo: ./instances\cap93.txt
+Tiempo: 8.31 segundos
+Solución válida: True
+Costo total: 1058892.9250000003
+----------------------------------------
+Archivo: ./instances\cap94.txt
+Tiempo: 8.23 segundos
+Solución válida: True
+Costo total: 1245274.9000000001
+----------------------------------------
+Archivo: ./instances\cap101.txt
+Tiempo: 0.12 segundos
+Solución válida: True
+Costo total: 832291.1500000001
+----------------------------------------
+Archivo: cap61.txt
+Tiempo: 0.08 segundos
+Solución válida: True
+Costo total: 950470.1875
+----------------------------------------
